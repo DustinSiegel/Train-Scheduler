@@ -19,41 +19,13 @@
 // Search Parameters
 var trainName   = "";
 var destination = "";
-var trainTime   = 0;
-var frequency   = 0;
-var nextTrain   = 0;
+var trainTime   = "";
+var frequency   = "";
+var nextTrain   = "";
 var firebase;
 
 // URL Base
 // var queryURLBase = "Placdholder/" + authKey;
-
-
-
-//Moment.js Variables ================================================================================================    
-
-    var tFrequency = 3;
-    // Time is 3:30 AM
-    var firstTime = "03:30";
-    // First Time (pushed back 1 year to make sure it comes before current time)
-    var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
-    console.log(firstTimeConverted);
-    // Current Time
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
-    // Difference between the times
-    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-    console.log("DIFFERENCE IN TIME: " + diffTime);
-    // Time apart (remainder)
-    var tRemainder = diffTime % tFrequency;
-    console.log(tRemainder);
-    // Minute Until Train
-    var tMinutesTillTrain = tFrequency - tRemainder;
-    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
-    // Next Train
-    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
-
-
 
 
 // Functions and Processes ===========================================================================================================
@@ -72,7 +44,32 @@ $(document).on("click", "#searchBtn", function() {
     console.log(frequency);
 
 
-    $("#wellSection").append("<h5 class='col-lg-2'>" + trainName + "</h5><h5 class='col-lg-3'>" + destination + "</h5><h5 class='col-lg-3'>" + trainTime + "</h5><h5 class='col-lg-2'>"+ frequency + "</h5><h5 class='col-lg-2'>" + nextTrain + " Minutes</h5>");
 
+
+
+
+//Moment.js Variables ================================================================================================    
+
+    var firstTimeConverted = moment(trainTime, "hh:mm");
+    console.log("First Time: " + firstTimeConverted);
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    // Difference between the times
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+    // Time apart (remainder)
+    var tRemainder = diffTime % frequency;
+    console.log(tRemainder);
+    // Minute Until Train
+    var tMinutesTillTrain = frequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+    // Next Train
+    nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+
+$("#wellSection").append("<h5 class='col-lg-2'>" + trainName + "</h5><h5 class='col-lg-3'>" + destination + "</h5><h5 class='col-lg-3'>" + trainTime + " Hours</h5><h5 class='col-lg-2'>"+ frequency + " Minutes</h5><h5 class='col-lg-2'>" + moment(nextTrain).format("hh:mm") + "</h5>");
+
+        
     return false;
 });
