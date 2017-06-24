@@ -13,9 +13,6 @@
 
 // Global Variables ====================================================================================================
 
-// var authKey = "Placeholder";
-
-// Search Parameters
 var trainName   = "";
 var destination = "";
 var trainTime   = "";
@@ -23,11 +20,14 @@ var frequency   = "";
 var nextTrain   = "";
 var firebase;
 
-// URL Base
-// var queryURLBase = "Placdholder/" + authKey;
-
-
 // Functions and Processes ===========================================================================================================
+
+// database.ref().on("value", function (snapshot) {
+//     trainSchedule = snapshot.val().trianSchedule;
+//     $("#wellSection").append("<h5 class='col-lg-2'>" + trainName + "</h5><h5 class='col-lg-3'>" + destination + "</h5><h5 class='col-lg-3'>" + trainTime + " Hours</h5><h5 class='col-lg-2'>"+ frequency + " Minutes</h5><h5 class='col-lg-2'>" + moment(nextTrain).format("hh:mm") + "</h5>");
+//     }, function (errorObject) {
+//         console.log("The read failed: " + errorObject.code);
+// });
 
 $(document).on("click", "#searchBtn", function() {
 
@@ -36,7 +36,7 @@ $(document).on("click", "#searchBtn", function() {
     trainTime = $("#trainTime").val();
     frequency = $("#frequency").val();
     
-     var trainSchedule = {trainName, destination, trainTime, frequency}
+    var trainSchedule = {trainName, destination, trainTime, frequency}
     database.ref().set(trainSchedule);
 
     console.log(trainName);
