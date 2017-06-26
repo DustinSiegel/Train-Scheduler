@@ -20,6 +20,39 @@ var frequency   = "";
 var nextTrain   = "";
 var firebase;
 
+// Functions and Processes ===========================================================================================================
+
+$(document).on("click", "#searchBtn", function() {
+
+    trainName = $("#trainName").val().trim();
+    destination = $("#destination").val().trim();
+    trainTime = $("#trainTime").val();
+    frequency = $("#frequency").val();
+
+    var trainSchedule = {"trainName": trainName, "destination": destination, "trainTime": trainTime, "frequency": frequency};
+    database.ref("trains/").set(trainSchedule);
+});
+
+$(document).ready(function() {
+
+    database.ref().on("child_added", function(snapshot) {
+    console.log(snapshot.val());
+
+        timeCalculator();
+
+        $("#wellSection").append("<h5 class='col-lg-2'>" + snapshot.val().trainName + "</h5><h5 class='col-lg-3'>" + snapshot.val().destination + "</h5><h5 class='col-lg-3'>" + snapshot.val().trainTime + " Hours</h5><h5 class='col-lg-2'>"+ snapshot.val().frequency + " Minutes</h5><h5 class='col-lg-2'>" + moment(nextTrain).format("hh:mm") + "</h5>");
+    // });
+
+        database.ref().on("value", function (snapshot) {
+        trainSchedule = snapshot.val().trianSchedule;
+       }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+        });
+        
+        return false;
+    });
+});
+
 // //Moment.js Variables ================================================================================================    
 
 function timeCalculator() {
@@ -38,39 +71,3 @@ function timeCalculator() {
     console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
     console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));       
 };
-
-// Functions and Processes ===========================================================================================================
-
-$(document).on("click", "#searchBtn", function() {
-
-    trainName = $("#trainName").val().trim();
-    destination = $("#destination").val().trim();
-    trainTime = $("#trainTime").val();
-    frequency = $("#frequency").val();
-
-    timeCalculator();
-
-    var trainSchedule = {"trainName": trainName, "destination": destination, "trainTime": trainTime, "frequency": frequency};
-    database.ref("trains/").set(trainSchedule);
-
-    $("#wellSection").append("<h5 class='col-lg-2'>" + snapshot.val().trainName + "</h5><h5 class='col-lg-3'>" + snapshot.val().destination + "</h5><h5 class='col-lg-3'>" + snapshot.val().trainTime + " Hours</h5><h5 class='col-lg-2'>"+ snapshot.val().frequency + " Minutes</h5><h5 class='col-lg-2'>" + moment(nextTrain).format("hh:mm") + "</h5>");
-});
-
-$(document).ready(function() {
-
-    database.ref().on("child_added", function(snapshot) {
-    console.log(snapshot.val());
-
-    timeCalculator();
-
-    $("#wellSection").append("<h5 class='col-lg-2'>" + snapshot.val().trainName + "</h5><h5 class='col-lg-3'>" + snapshot.val().destination + "</h5><h5 class='col-lg-3'>" + snapshot.val().trainTime + " Hours</h5><h5 class='col-lg-2'>"+ snapshot.val().frequency + " Minutes</h5><h5 class='col-lg-2'>" + moment(nextTrain).format("hh:mm") + "</h5>");
-    });
-
-    database.ref().on("value", function (snapshot) {
-        trainSchedule = snapshot.val().trianSchedule;
-       }, function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
-    });
-        return false;
-});
-
