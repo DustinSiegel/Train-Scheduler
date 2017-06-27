@@ -15,21 +15,20 @@ var trainsRef = firebase.database().ref().child('trains');
 
 var trainName;
 var destination;
-var nextTrain;
+// var nextTrain;
 var firebase;
 var trainSchedule;      
 
 // Functions and Processes ===========================================================================================================
 $(document).ready(function() {
     trainsRef.on("child_added", function(snapshot) {
-        // console.log("snapshot: " + snapshot.val());
         var lastTrain = snapshot.val();
         var trainTime = lastTrain.trainTime;
         var frequency = lastTrain.frequency;
         trainSchedule = snapshot.val().trianSchedule;
 
         var nextTrain = getNextTrainTime(trainTime, frequency);
-        $("#wellSection").append("<h5 class='col-lg-2'>" + snapshot.val().trainName + "</h5><h5 class='col-lg-3'>" + snapshot.val().destination + "</h5><h5 class='col-lg-3'>" + snapshot.val().trainTime + " Hours</h5><h5 class='col-lg-2'>"+ snapshot.val().frequency + " Minutes</h5><h5 class='col-lg-2'>" + nextTrain + "</h5>");
+        $("#wellSection").append("<h5 class='col-lg-2'>" + snapshot.val().trainName + "</h5><h5 class='col-lg-3'>" + snapshot.val().destination + "</h5><h5 class='col-lg-3'>" + snapshot.val().trainTime + " Hours</h5><h5 class='col-lg-2'>"+ snapshot.val().frequency + " Minutes</h5><h5 class='col-lg-2'>" + nextTrain.format("hh:mm") + "</h5>");
     });
 
     // //Moment.js Variables ================================================================================================    
@@ -40,12 +39,12 @@ $(document).ready(function() {
         var tRemainder = diffTime % frequency;    // Time apart (remainder)
         var tMinutesTillTrain = frequency - tRemainder;     // Minute Until Train
         var nextTrain = moment().add(tMinutesTillTrain, "minutes");    // Next Train
-        // console.log("First Time: " + firstTimeConverted);
-        // console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
-        // console.log("DIFFERENCE IN TIME: " + diffTime);
-        // console.log("REMAINDER: " + tRemainder);
-        // console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
-        // console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+        console.log("First Time: " + firstTimeConverted);
+        console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+        console.log("DIFFERENCE IN TIME: " + diffTime);
+        console.log("REMAINDER: " + tRemainder);
+        console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+        console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
         return nextTrain;
     };
 
@@ -63,7 +62,7 @@ $(document).ready(function() {
                 trainName: trainName,
                 destination: destination,
                 trainTime: trainTime,
-                frequency: frequency
+                frequency: frequency,
             });
         }
     });
